@@ -89,7 +89,7 @@ const ProductList = () => {
                     {snackbar.message}
                 </MuiAlert>
             </Snackbar>
-            <Box maxWidth="lg" mx="auto" px={2}>
+            <Box maxWidth="lg" mx="auto" px={2} bgcolor="#f5f6fa" borderRadius={4} boxShadow={0}>
                 <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems="center" mb={4} gap={2}>
                     <Typography variant="h4" color="primary" fontWeight={700}>Mes Produits</Typography>
                     <Stack direction="row" spacing={2}>
@@ -101,7 +101,11 @@ const ProductList = () => {
                         </Button>
                     </Stack>
                 </Stack>
-                {loading ? (
+                {loading && products.length === 0 ? (
+                    <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
+                        <CircularProgress />
+                    </Box>
+                ) : loading ? (
                     <Grid container spacing={4}>
                         {[...Array(4)].map((_, i) => (
                             <Grid item xs={12} md={6} key={i}>
@@ -124,7 +128,7 @@ const ProductList = () => {
                     <Grid container spacing={4}>
                         {products.map((product) => (
                             <Grid item xs={12} md={6} key={product.id}>
-                                <Card elevation={4} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                <Card elevation={4} sx={{ display: 'flex', flexDirection: 'column', height: '100%', bgcolor: '#fff' }}>
                                     <CardMedia
                                         component="img"
                                         height="200"
@@ -151,21 +155,35 @@ const ProductList = () => {
                         ))}
                     </Grid>
                 )}
-                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} mt={4}>
+                {/* Pagination améliorée */}
+                <Stack direction="row" justifyContent="center" alignItems="center" spacing={1} mt={4}>
                     <Button
                         onClick={() => fetchProducts(currentPage - 1)}
                         disabled={currentPage === 1}
                         variant="outlined"
+                        sx={{ minWidth: 40 }}
                     >
                         Précédent
                     </Button>
-                    <Typography variant="body1">
-                        Page {currentPage} / {totalPages}
-                    </Typography>
+                    {[...Array(totalPages)].map((_, idx) => {
+                        const page = idx + 1;
+                        return (
+                            <Button
+                                key={page}
+                                onClick={() => fetchProducts(page)}
+                                variant={page === currentPage ? 'contained' : 'outlined'}
+                                color={page === currentPage ? 'primary' : 'inherit'}
+                                sx={{ minWidth: 40, fontWeight: page === currentPage ? 700 : 400, bgcolor: page === currentPage ? '#1976d2' : '#fff', color: page === currentPage ? '#fff' : '#1976d2', borderColor: '#1976d2', mx: 0.5 }}
+                            >
+                                {page}
+                            </Button>
+                        );
+                    })}
                     <Button
                         onClick={() => fetchProducts(currentPage + 1)}
                         disabled={currentPage === totalPages}
                         variant="outlined"
+                        sx={{ minWidth: 40 }}
                     >
                         Suivant
                     </Button>

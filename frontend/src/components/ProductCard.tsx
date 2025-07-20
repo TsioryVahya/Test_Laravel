@@ -19,12 +19,12 @@ const ProductCard: React.FC<{ product: Product; onDelete: (id: number) => void; 
         <p className="text-gray-400 text-base mb-4 flex-grow">{product.description}</p>
         <div className="text-2xl font-bold text-green-400 mb-4">${product.price}</div>
         <div className="flex justify-between items-center mt-auto">
-            <Link to={`/products/${product.id}/edit`} className="text-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                Edit
-            </Link>
-            <button onClick={() => onDelete(product.id)} className="text-sm bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-                Delete
-            </button>
+          <Link to={`/products/${product.id}/edit`} className="text-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            Edit
+          </Link>
+          <button onClick={() => onDelete(product.id)} className="text-sm bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+            Delete
+          </button>
         </div>
       </div>
     </div>

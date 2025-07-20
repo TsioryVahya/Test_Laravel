@@ -32,10 +32,6 @@ const ProductForm = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const url = id
-                ? `${API_URL}/api/products/${id}`
-                : `${API_URL}/api/products`;
-            const method = id ? 'POST' : 'POST'; // For file upload, use POST or PUT with FormData
             const formPayload = new FormData();
             formPayload.append('name', formData.name);
             formPayload.append('description', formData.description);
@@ -43,8 +39,15 @@ const ProductForm = () => {
             if (imageFile) {
                 formPayload.append('image', imageFile);
             }
+            // Add _method field for PUT requests when using FormData
+            if (id) {
+                formPayload.append('_method', 'PUT');
+            }
+            const url = id
+                ? `${API_URL}/api/products/${id}`
+                : `${API_URL}/api/products`;
             const response = await fetch(url, {
-                method: id ? 'POST' : 'POST', // Use POST for both add and edit for simplicity
+                method: 'POST', // Always use POST for FormData with _method spoofing
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

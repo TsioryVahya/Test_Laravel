@@ -58,22 +58,23 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product deleted']);
     }
 
-    public function exportCsv(Request $request)
-    {
-        $products = Product::where('user_id', auth()->id())->get();
-        $csv = Writer::createFromString();
-        $csv->insertOne(['name', 'image_url', 'description', 'price']);
-        foreach ($products as $product) {
-            $csv->insertOne([
-                $product->name,
-                $product->image_url,
-                $product->description,
-                $product->price,
-            ]);
-        }
-        return response($csv->toString(), 200, [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="products.csv"',
+public function exportCsv(Request $request)
+{
+    $products = Product::where('user_id', auth()->id())->get();
+    $csv = \League\Csv\Writer::createFromString();
+    $csv->setDelimiter(';'); // <-- Ajoute cette ligne pour utiliser le point-virgule
+    $csv->insertOne(['name', 'image_url', 'description', 'price']);
+    foreach ($products as $product) {
+        $csv->insertOne([
+            $product->name,
+            $product->image_url,
+            $product->description,
+            $product->price,
         ]);
     }
+    return response($csv->toString(), 200, [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => 'attachment; filename=\"products.csv\"',
+    ]);
+}
 }

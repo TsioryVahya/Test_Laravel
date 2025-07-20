@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
     <AppBar position="static" color="primary" elevation={2}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h6" component={Link} to="/products" color="inherit" sx={{ textDecoration: 'none', fontWeight: 700 }}>
-          KandraShop
+          Inventaire Produit
         </Typography>
         <Stack direction="row" spacing={2}>
           {token ? (
