@@ -26,16 +26,26 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        $product = Product::create(array_merge(
-            $request->validated(),
-            ['user_id' => auth()->id()]
-        ));
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image_url'] = '/storage/' . $path;
+        } else {
+            $data['image_url'] = '';
+        }
+        $product = Product::create($data);
         return response()->json($product, 201);
     }
 
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $product->update($request->validated());
+        $data = $request->validated();
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image_url'] = '/storage/' . $path;
+        }
+        $product->update($data);
         return response()->json($product);
     }
 
